@@ -6,15 +6,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        //bom dia
-
-        //vamos ordernar os produtos
-
-        //divider
-
-        //itens frescos + grid
-      ]),
+      appBar: AppBar(
+        title: Text(
+          "HomePage",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        elevation: 0.0,
+        backgroundColor: Colors.grey[100],
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.notifications_none, color:Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.send, color: Colors.black),
+            onPressed: () {},
+          )
+        ],
+      ),
     );
   }
 }

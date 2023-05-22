@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:viva_store/pages/home_page.dart';
 import 'pages/intro_page.dart';
 
 void main() {
