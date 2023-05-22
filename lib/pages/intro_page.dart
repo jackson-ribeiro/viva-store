@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 import 'home_page.dart';
 
@@ -16,15 +16,11 @@ class IntroPage extends StatelessWidget {
                 left: 80, top: 160, right: 80, bottom: 40),
             child: Image.asset('lib/images/roupas.jpg'),
           ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
+          const Padding(
+            padding: EdgeInsets.all(24.0),
             child: Text(
               "Nós entregamos para você !",
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-              ),
             ),
           ),
 
