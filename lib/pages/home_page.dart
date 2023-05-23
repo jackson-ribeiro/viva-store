@@ -41,7 +41,6 @@ class HomePage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: <Widget>[
-            
 
           ],
         ),
