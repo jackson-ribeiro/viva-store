@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
-class ProductDetails extends StatelessWidget{
-  String img;
-  ProductDetails(this.img, {super.key});
+class ProductDetails extends StatelessWidget {
+  final String img;
+
+  const ProductDetails({Key? key, required this.img}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,34 +19,57 @@ class ProductDetails extends StatelessWidget{
                 color: const Color.fromARGB(255, 224, 224, 224),
                 image: DecorationImage(
                   image: AssetImage("images/$img.png"),
-                  fit: BoxFit.cover
-                )
+                  fit: BoxFit.cover,
+                ),
               ),
               child: Padding(
-                padding:  const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(30)
+                          borderRadius: BorderRadius.circular(30),
                         ),
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          size: 22,
+                        ),
+                      ),                      
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(padding: EdgeInsets.only(top: 8, left: 15, right: 15),
+            child: Column (
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(padding: EdgeInsets.only(right: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      img,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold
                       ),
                     )
                   ],
-                ),
-                ),
+                ),),
+              ],),
             )
-          ]
-          ),
+          ],
+        ),
       ),
     );
   }
-
 }
