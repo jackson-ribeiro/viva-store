@@ -198,12 +198,25 @@ class _HomePageState extends State<HomePage> {
                     childAspectRatio: 0.8,
                     children: produtoList
                         .map(
-                          (produto) => _buildCard(
-                            context,
-                            produto.nome_prod,
-                            produto.desc_prod,
-                            produto.valor.toStringAsFixed(2),
-                            produto.imageUrl,
+                          (produto) => GestureDetector(
+                            onTap: () {
+                              // Redirecionar para a página do produto individualmente
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductPage(
+                                    produto: produto,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: _buildCard(
+                              context,
+                              produto.nome_prod,
+                              produto.desc_prod,
+                              produto.valor.toStringAsFixed(2),
+                              produto.imageUrl,
+                            ),
                           ),
                         )
                         .toList(),
@@ -257,6 +270,83 @@ class _HomePageState extends State<HomePage> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProductPage extends StatelessWidget {
+  final Produto produto;
+
+  const ProductPage({required this.produto});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(produto.nome_prod),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 200,
+              width: double.infinity,
+              child: Image.network(
+                produto.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    produto.nome_prod,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Descrição: ${produto.desc_prod}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Valor: \$${produto.valor.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Categoria: ${produto.categoria}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Estoque: ${produto.estoque}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Aqui você pode adicionar a lógica para adicionar o produto ao carrinho
+                      // Por exemplo, você pode chamar uma função que lida com essa ação
+                      // addToCart(produto);
+                    },
+                    child: Text('Adicionar ao Carrinho'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
