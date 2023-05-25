@@ -1,6 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:viva_store/Class/Produto.dart';
-import 'Class/Produto.dart';
 
 class ProdutoFire {
   static Future<List<Produto>> getProducts() async {
@@ -61,6 +62,39 @@ class ProdutoFire {
       });
     } catch (e) {
       print('Erro ao buscar produtos por categoria: $e');
+    }
+
+    return produtos;
+  }
+
+  static Future<List<Produto>> searchProducts(String search) async {
+    List<Produto> produtos = [];
+
+    if (search.isNotEmpty) {
+      try {
+        QuerySnapshot querySnapshot =
+            await FirebaseFirestore.instance.collection('produto').get();
+
+        querySnapshot.docs.forEach((doc) {
+          Produto produto = Produto(
+            nome_prod: doc['nome_prod'],
+            desc_prod: doc['desc_prod'],
+            valor: double.parse(doc['valor'].toString()),
+            imageUrl: doc['imagem_prod'],
+            categoria: doc['categoria_prod'],
+            estoque: int.parse(doc['estoque'].toString()),
+          );
+
+          // Verificar se o nome do produto contém a letra pesquisada (ignorando maiúsculas e minúsculas)
+          if (produto.nome_prod.toLowerCase().contains(search.toLowerCase())) {
+            produtos.add(produto);
+          }
+        });
+      } catch (e) {
+        print('Erro ao buscar produtos: $e');
+      }
+    } else {
+      produtos = await getProducts(); // Obter todos os produtos
     }
 
     return produtos;
