@@ -5,6 +5,8 @@ import 'package:viva_store/Class/Produto.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -21,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     'mesa e banho'
   ];
   String categoriaSelecionada = 'todos';
+  String searchTerm = '';
 
   @override
   void initState() {
@@ -39,6 +42,14 @@ class _HomePageState extends State<HomePage> {
   // Método para buscar os produtos pela categoria selecionada
   void fetchProdutosByCategory(String category) async {
     List<Produto> produtos = await ProdutoFire.getProductsByCategory(category);
+    setState(() {
+      produtoList = produtos;
+    });
+  }
+
+  // Método para buscar os produtos pelo termo de pesquisa
+  void searchProducts(String search) async {
+    List<Produto> produtos = await ProdutoFire.searchProducts(search);
     setState(() {
       produtoList = produtos;
     });
@@ -79,6 +90,11 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
             padding: const EdgeInsets.all(16),
             child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchTerm = value;
+                });
+              },
               decoration: InputDecoration(
                 hintText: 'Search',
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -99,7 +115,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search, color: Colors.black),
-                  onPressed: () {},
+                  onPressed: () {
+                    searchProducts(searchTerm);
+                  },
                 ),
               ),
             ),
@@ -230,12 +248,13 @@ class _HomePageState extends State<HomePage> {
             description,
             style: const TextStyle(fontSize: 12),
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           const Padding(padding: EdgeInsets.all(4)),
           Text(
-            price,
+            '\$$price',
             style: const TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
           ),
         ],
       ),
