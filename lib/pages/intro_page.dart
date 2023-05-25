@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'home_page.dart';
+// import 'home_page.dart';
+import 'cart_page.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class IntroPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return const HomePage();
+                  return const CartPage();
                 },
               ),
             ),
