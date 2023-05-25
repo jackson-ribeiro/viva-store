@@ -9,20 +9,23 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   List<CartItem> cartItems = [
     CartItem(
-        name: 'Camiseta',
-        quantity: 1,
-        price: 10.0,
-        imagePath: 'images/camiseta.png'),
+      name: 'Item 1',
+      quantity: 1,
+      price: 10.0,
+      imagePath: 'lib/images/camiseta.png',
+    ),
     CartItem(
-        name: 'Sapato',
-        quantity: 2,
-        price: 15.0,
-        imagePath: 'images/camiseta.png'),
+      name: 'Item 2',
+      quantity: 2,
+      price: 15.0,
+      imagePath: 'lib/images/camiseta.png',
+    ),
     CartItem(
-        name: 'Calça',
-        quantity: 3,
-        price: 20.0,
-        imagePath: 'images/camiseta.png'),
+      name: 'Item 3',
+      quantity: 3,
+      price: 20.0,
+      imagePath: 'lib/images/camiseta.png',
+    ),
   ];
 
   double shippingCost = 5.0;
@@ -42,6 +45,7 @@ class _CartPageState extends State<CartPage> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
+              // Lógica para esvaziar o carrinho
               setState(() {
                 cartItems.clear();
               });
@@ -56,9 +60,14 @@ class _CartPageState extends State<CartPage> {
               itemCount: cartItems.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
+                  leading: Image.asset(
+                    cartItems[index].imagePath,
+                    width: 50,
+                    height: 50,
+                  ),
                   title: Text(cartItems[index].name),
                   subtitle: Text(
-                      'Preço: R\$${cartItems[index].price.toStringAsFixed(2)}'),
+                      'Price: \$${cartItems[index].price.toStringAsFixed(2)}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -90,14 +99,14 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           ListTile(
-            title: Text('Total da Compra: R\$ ${total.toStringAsFixed(2)}'),
+            title: Text('Total: \$${total.toStringAsFixed(2)}'),
           ),
           ListTile(
-            title: Text('Frete: R\$ ${shippingCost.toStringAsFixed(2)}'),
+            title: Text('Shipping: \$${shippingCost.toStringAsFixed(2)}'),
           ),
           ListTile(
-            title:
-                Text('Total: R\$ ${(total + shippingCost).toStringAsFixed(2)}'),
+            title: Text(
+                'Grand Total: \$${(total + shippingCost).toStringAsFixed(2)}'),
           ),
         ],
       ),
