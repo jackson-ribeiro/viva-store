@@ -18,7 +18,7 @@ class ProductDetails extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 224, 224, 224),
                 image: DecorationImage(
-                  image: AssetImage("images/$img.png"),
+                  image: AssetImage("lib/images/tenis_nike.png"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -41,31 +41,64 @@ class ProductDetails extends StatelessWidget {
                           Icons.arrow_back_ios_new,
                           size: 22,
                         ),
-                      ),                      
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
             SizedBox(height: 10),
-            Padding(padding: EdgeInsets.only(top: 8, left: 15, right: 15),
-            child: Column (
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(padding: EdgeInsets.only(right: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      img,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold
+            Padding(
+              padding: EdgeInsets.only(top: 8, left: 15, right: 15),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Tênis Nike",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "R\$ 20,00",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Vestuário",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 104, 104, 104)),
                       ),
-                    )
-                  ],
-                ),),
-              ],),
+                      Text(
+                        "Estoque: 10",
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: Color.fromARGB(255, 15, 181, 32)),
+                      ),
+
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                    style: TextStyle(color: Color.fromARGB(255, 103, 103, 103)),
+                  ),                  
+                ],
+              ),
             )
           ],
         ),
