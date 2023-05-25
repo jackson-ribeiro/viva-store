@@ -1,4 +1,6 @@
-import 'package:uuid/uuid.dart';
+// ignore_for_file: file_names
+
+import 'package:uuid/uuid.dart' show Uuid;
 
 class Produto {
   late String id = const Uuid().v4();
