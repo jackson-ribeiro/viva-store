@@ -1,49 +1,88 @@
 import 'package:flutter/material.dart';
-
 import '../Class/Produto.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   final Produto produto;
+  final List<Produto> carrinho;
 
-  const ProductDetailPage({Key? key, required this.produto}) : super(key: key);
+  const ProductPage({
+    Key? key,
+    required this.produto,
+    required this.carrinho,
+    required void Function(Produto produto) adicionarAoCarrinho,
+  }) : super(key: key);
 
+  @override
+  _ProductPageState createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(produto.nome_prod),
+        title: const Text('Detalhes do Produto'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.network(
-              produto.imageUrl,
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.produto.nome_prod,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        widget.produto.imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      widget.produto.desc_prod,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'R\$ ${widget.produto.valor.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(height: 16),
-            Text(
-              produto.nome_prod,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  _adicionarAoCarrinho();
+                },
+                child: const Text('Adicionar ao Carrinho'),
+              ),
             ),
-            SizedBox(height: 8),
-            Text(
-              produto.desc_prod,
-              style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Price: \$${produto.valor.toStringAsFixed(2)}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            // Adicione outros detalhes do produto, se necessário
           ],
         ),
       ),
     );
+  }
+
+  void _adicionarAoCarrinho() {
+    setState(() {
+      widget.carrinho.add(widget.produto);
+    });
   }
 }
