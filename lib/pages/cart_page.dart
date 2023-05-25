@@ -59,6 +59,8 @@ class _CartPageState extends State<CartPage> {
             child: ListView.builder(
               itemCount: cartItems.length,
               itemBuilder: (BuildContext context, int index) {
+                final item = cartItems[index];
+                final itemTotal = item.price * item.quantity;
                 return ListTile(
                   leading: Image.asset(
                     cartItems[index].imagePath,
@@ -66,8 +68,13 @@ class _CartPageState extends State<CartPage> {
                     height: 50,
                   ),
                   title: Text(cartItems[index].name),
-                  subtitle: Text(
-                      'Preço: R\$${cartItems[index].price.toStringAsFixed(2)}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Preço: R\$ ${item.price.toStringAsFixed(2)}'),
+                      Text('Total: R\$ ${itemTotal.toStringAsFixed(2)}'),
+                    ],
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
