@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:viva_store/ProdutosFire.dart';
 import 'package:viva_store/Class/Produto.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:viva_store/pages/product_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -19,11 +19,11 @@ class _HomePageState extends State<HomePage> {
     'vestuário',
     'decoração',
     'beleza',
-    'cama',
-    'mesa e banho'
+    'cama, mesa e banho'
   ];
   String categoriaSelecionada = 'todos';
   String searchTerm = '';
+  List<Produto> carrinho = []; // Lista de produtos no carrinho
 
   @override
   void initState() {
@@ -59,7 +59,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      drawer: Drawer(),
       appBar: AppBar(
         title: const Text(
           "Viva Store",
@@ -68,19 +67,12 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.grey[100],
-        leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            _key.currentState?.openDrawer();
-          },
-        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.shopping_cart, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              _openCarrinho(); // Chama o método para exibir o carrinho
+            },
           ),
         ],
       ),
@@ -122,107 +114,108 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: 190,
-                    width: double.infinity,
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          'https://s2.glbimg.com/1o2J-rf2G9qtlQlm82gaq-mFBec=/0x129:1024x952/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2023/7/i/ME2AxRRoygUyFPCDe0jQ/3.png',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Container(color: Colors.blue),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+          const SizedBox(height: 16),
+          Container(
+            height: 40,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categorias.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ChoiceChip(
+                    label: Text(categorias[index]),
+                    selected: categoriaSelecionada == categorias[index],
+                    onSelected: (selected) {
+                      setState(() {
+                        categoriaSelecionada = categorias[index];
+                        if (categoriaSelecionada == 'todos') {
+                          fetchProdutos();
+                        } else {
+                          fetchProdutosByCategory(categoriaSelecionada);
+                        }
+                      });
+                    },
                   ),
-                  const SizedBox(height: 16),
-                  CarouselSlider(
-                    items: categorias.map((categoria) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            categoriaSelecionada = categoria;
-                            if (categoriaSelecionada == 'todos') {
-                              fetchProdutos(); // Buscar todos os produtos novamente
-                            } else {
-                              fetchProdutosByCategory(
-                                  categoriaSelecionada); // Buscar os produtos pela categoria selecionada
-                            }
-                          });
-                        },
-                        child: Container(
-                          color: categoria == categoriaSelecionada
-                              ? Colors.grey[400]
-                              : Colors.grey[200],
-                          child: Center(
-                            child: Text(
-                              categoria.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: categoria == categoriaSelecionada
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(8.0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.7,
+              ),
+              itemCount: produtoList.length,
+              itemBuilder: (context, index) {
+                final produto = produtoList[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductPage(
+                          produto: produto,
+                          carrinho: carrinho,
+                          adicionarAoCarrinho: _adicionarAoCarrinho,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 2.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(8.0),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: produto.imageUrl,
+                              placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                      );
-                    }).toList(),
-                    options: CarouselOptions(
-                      height: 40,
-                      viewportFraction: 0.25,
-                      initialPage: categorias.indexOf(categoriaSelecionada),
-                      enableInfiniteScroll: false,
-                      onPageChanged: (index, _) {
-                        setState(() {
-                          categoriaSelecionada = categorias[index];
-                          if (categoriaSelecionada == 'todos') {
-                            fetchProdutos(); // Buscar todos os produtos novamente
-                          } else {
-                            fetchProdutosByCategory(
-                                categoriaSelecionada); // Buscar os produtos pela categoria selecionada
-                          }
-                        });
-                      },
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                produto.nome_prod,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.0),
+                              Text(
+                                produto.desc_prod,
+                                style: TextStyle(color: Colors.grey[600]),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(8),
-                    childAspectRatio: 0.8,
-                    children: produtoList
-                        .map(
-                          (produto) => GestureDetector(
-                            onTap: () {
-                              // Redirecionar para a página do produto individualmente
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductPage(
-                                    produto: produto,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: _buildCard(
-                              context,
-                              produto.nome_prod,
-                              produto.desc_prod,
-                              produto.valor.toStringAsFixed(2),
-                              produto.imageUrl,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ],
@@ -230,123 +223,55 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCard(
-    BuildContext context,
-    String name,
-    String description,
-    String price,
-    String imagePath,
-  ) {
-    return Card(
-      elevation: 4,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 100,
-            width: double.infinity,
-            child: Image.network(
-              imagePath,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const Padding(padding: EdgeInsets.all(8)),
-          Text(
-            name,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Padding(padding: EdgeInsets.all(4)),
-          Text(
-            description,
-            style: const TextStyle(fontSize: 12),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Padding(padding: EdgeInsets.all(4)),
-          Text(
-            '\$$price',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
+  void _adicionarAoCarrinho(Produto produto) {
+    setState(() {
+      carrinho.add(produto); // Adiciona o produto ao carrinho
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Produto adicionado ao carrinho'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _openCarrinho() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CarrinhoPage(carrinho: carrinho),
       ),
     );
   }
 }
 
-class ProductPage extends StatelessWidget {
-  final Produto produto;
+class CarrinhoPage extends StatelessWidget {
+  final List<Produto> carrinho;
 
-  const ProductPage({required this.produto});
+  const CarrinhoPage({Key? key, required this.carrinho}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(produto.nome_prod),
+        title: const Text('Carrinho'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: Image.network(
-                produto.imageUrl,
-                fit: BoxFit.cover,
-              ),
+      body: ListView.builder(
+        itemCount: carrinho.length,
+        itemBuilder: (context, index) {
+          final produto = carrinho[index];
+          return ListTile(
+            leading: CachedNetworkImage(
+              imageUrl: produto.imageUrl,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              height: 50,
+              width: 50,
             ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    produto.nome_prod,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Descrição: ${produto.desc_prod}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Valor: \$${produto.valor.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Categoria: ${produto.categoria}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Estoque: ${produto.estoque}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Aqui você pode adicionar a lógica para adicionar o produto ao carrinho
-                      // Por exemplo, você pode chamar uma função que lida com essa ação
-                      // addToCart(produto);
-                    },
-                    child: Text('Adicionar ao Carrinho'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+            title: Text(produto.nome_prod),
+            subtitle: Text(produto.desc_prod),
+          );
+        },
       ),
     );
   }
