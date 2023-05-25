@@ -67,7 +67,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                   title: Text(cartItems[index].name),
                   subtitle: Text(
-                      'Price: \$${cartItems[index].price.toStringAsFixed(2)}'),
+                      'Preço: R\$${cartItems[index].price.toStringAsFixed(2)}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -99,14 +99,14 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           ListTile(
-            title: Text('Total: \$${total.toStringAsFixed(2)}'),
+            title: Text('Sub-Total: R\$ ${total.toStringAsFixed(2)}'),
           ),
           ListTile(
-            title: Text('Shipping: \$${shippingCost.toStringAsFixed(2)}'),
+            title: Text('Frete: R\$ ${shippingCost.toStringAsFixed(2)}'),
           ),
           ListTile(
-            title: Text(
-                'Grand Total: \$${(total + shippingCost).toStringAsFixed(2)}'),
+            title:
+                Text('Total: R\$ ${(total + shippingCost).toStringAsFixed(2)}'),
           ),
         ],
       ),
