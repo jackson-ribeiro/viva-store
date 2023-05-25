@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -32,9 +33,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    double total =
-        cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meu Carrinho'),
@@ -61,18 +59,20 @@ class _CartPageState extends State<CartPage> {
               itemBuilder: (BuildContext context, int index) {
                 final item = cartItems[index];
                 final itemTotal = item.price * item.quantity;
+
                 return ListTile(
                   leading: Image.asset(
-                    cartItems[index].imagePath,
+                    item.imagePath,
                     width: 50,
                     height: 50,
                   ),
-                  title: Text(cartItems[index].name),
+                  title: Text(item.name),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Preço: R\$ ${item.price.toStringAsFixed(2)}'),
-                      Text('Total: R\$ ${itemTotal.toStringAsFixed(2)}'),
+                      Text('Preço: R\$${item.price.toStringAsFixed(2)}'),
+                      // Text('Quantity: ${item.quantity}'),
+                      Text('Total: R\$${itemTotal.toStringAsFixed(2)}'),
                     ],
                   ),
                   trailing: Row(
@@ -81,8 +81,8 @@ class _CartPageState extends State<CartPage> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            if (cartItems[index].quantity > 1) {
-                              cartItems[index].quantity--;
+                            if (item.quantity > 1) {
+                              item.quantity--;
                             } else {
                               cartItems.removeAt(index);
                             }
@@ -90,11 +90,11 @@ class _CartPageState extends State<CartPage> {
                         },
                         icon: const Icon(Icons.remove),
                       ),
-                      Text(cartItems[index].quantity.toString()),
+                      Text(item.quantity.toString()),
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            cartItems[index].quantity++;
+                            item.quantity++;
                           });
                         },
                         icon: const Icon(Icons.add),
@@ -106,18 +106,56 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           ListTile(
-            title: Text('Sub-Total: R\$ ${total.toStringAsFixed(2)}'),
+            title:
+                Text('Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}'),
           ),
           ListTile(
             title: Text('Frete: R\$ ${shippingCost.toStringAsFixed(2)}'),
           ),
           ListTile(
             title:
-                Text('Total: R\$ ${(total + shippingCost).toStringAsFixed(2)}'),
+                Text('Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Lógica para finalizar a compra
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Compra Finalizada'),
+                    content: const Text('Obrigado por sua compra!'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Fechar'),
+                        onPressed: () {
+                          //navegar para a página inicial
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                            (route) => false,
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: const Text('Finalizar Compra'),
           ),
         ],
       ),
     );
+  }
+
+  double calculateTotal() {
+    return cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+  }
+
+  double calculateGrandTotal() {
+    return calculateTotal() + shippingCost;
   }
 }
 
