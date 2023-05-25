@@ -71,7 +71,7 @@ class _CartPageState extends State<CartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Preço: R\$${item.price.toStringAsFixed(2)}'),
-                      // Text('Quantity: ${item.quantity}'),
+                      // Text('Quantidade: ${item.quantity}'),
                       Text('Total: R\$${itemTotal.toStringAsFixed(2)}'),
                     ],
                   ),
@@ -143,7 +143,19 @@ class _CartPageState extends State<CartPage> {
                 },
               );
             },
-            child: const Text('Finalizar Compra'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              elevation: 3,
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+            ),
+            child: const Text(
+              'Finalizar Compra',
+              style: TextStyle(fontSize: 18),
+            ),
           ),
         ],
       ),
