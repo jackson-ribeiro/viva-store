@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
+          SizedBox(
             height: 40,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(8.0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.7,
               ),
@@ -175,15 +175,15 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Expanded(
                           child: ClipRRect(
-                            borderRadius: BorderRadius.vertical(
+                            borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(8.0),
                             ),
                             child: CachedNetworkImage(
                               imageUrl: produto.imageUrl,
-                              placeholder: (context, url) =>
-                                  Center(child: CircularProgressIndicator()),
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -195,19 +195,19 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 produto.nome_prod,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(height: 4.0),
-                              Text(
-                                produto.desc_prod,
-                                style: TextStyle(color: Colors.grey[600]),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              const SizedBox(height: 4.0),
+                              // Text(
+                              //   produto.desc_prod,
+                              //   style: TextStyle(color: Colors.grey[600]),
+                              //   maxLines: 2,
+                              //   overflow: TextOverflow.ellipsis,
+                              // ),
                             ],
                           ),
                         ),
@@ -228,9 +228,9 @@ class _HomePageState extends State<HomePage> {
       carrinho.add(produto); // Adiciona o produto ao carrinho
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Produto adicionado ao carrinho'),
-        duration: const Duration(seconds: 2),
+      const SnackBar(
+        content: Text('Produto adicionado ao carrinho'),
+        duration: Duration(seconds: 2),
       ),
     );
   }
@@ -263,8 +263,8 @@ class CarrinhoPage extends StatelessWidget {
           return ListTile(
             leading: CachedNetworkImage(
               imageUrl: produto.imageUrl,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               height: 50,
               width: 50,
             ),
