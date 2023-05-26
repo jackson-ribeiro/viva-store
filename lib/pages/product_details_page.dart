@@ -103,9 +103,9 @@ class ProductDetails extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {},
                           child: Padding(
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(15.0),
                             child: Text(
-                              'Finalizar Compra',
+                              'Adicionar ao carrinho',
                               style: TextStyle(
                                   fontSize: 18.0, fontWeight: FontWeight.w900),
                             ),
