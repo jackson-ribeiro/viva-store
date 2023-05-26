@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
+
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   List<CartItem> cartItems = [
     CartItem(
       name: 'Item 1',
@@ -31,24 +34,78 @@ class _CartPageState extends State<CartPage> {
 
   double shippingCost = 5.0;
 
+  bool isProcessing = false;
+  bool isAnimationCompleted = false;
+
+  late AnimationController _animationController;
+  late Animation<Color?> _buttonColorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _buttonColorAnimation = _animationController.drive(
+      ColorTween(
+        begin: Colors.blue,
+        end: Colors.green,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meu Carrinho'),
+        title:
+            const Text('Meu Carrinho', style: TextStyle(color: Colors.black)),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              // Lógica para esvaziar o carrinho
-              setState(() {
-                cartItems.clear();
-              });
-            },
+        leading: IconButton(
+          icon: const CircleAvatar(
+            child: Icon(Icons.arrow_back),
+            // backgroundColor: Colors.blue,
           ),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              (route) => false,
+            );
+          },
+        ),
+        actions: [
+          // IconButton(
+          //   icon: const Icon(Icons.delete),
+          //   onPressed: () {
+          //     // Lógica para esvaziar o carrinho
+          //     setState(() {
+          //       cartItems.clear();
+          //     });
+          //   },
+          // ),
+          // IconButton(
+          //   icon: const Icon(Icons.home),
+          //   onPressed: () {
+          //     // Navegar para a página inicial
+          //     Navigator.pushAndRemoveUntil(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => const HomePage()),
+          //       (route) => false,
+          //     );
+          //   },
+          // ),
         ],
       ),
       body: Column(
@@ -71,15 +128,14 @@ class _CartPageState extends State<CartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Preço: R\$${item.price.toStringAsFixed(2)}'),
-                      // Text('Quantidade: ${item.quantity}'),
                       Text('Total: R\$${itemTotal.toStringAsFixed(2)}'),
                     ],
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
-                        onPressed: () {
+                      InkWell(
+                        onTap: () {
                           setState(() {
                             if (item.quantity > 1) {
                               item.quantity--;
@@ -88,16 +144,47 @@ class _CartPageState extends State<CartPage> {
                             }
                           });
                         },
-                        icon: const Icon(Icons.remove),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.deepPurple,
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: const Icon(
+                            Icons.remove,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                      Text(item.quantity.toString()),
-                      IconButton(
-                        onPressed: () {
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Text(
+                        item.quantity.toString(),
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      InkWell(
+                        onTap: () {
                           setState(() {
                             item.quantity++;
                           });
                         },
-                        icon: const Icon(Icons.add),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.deepPurple,
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -105,46 +192,50 @@ class _CartPageState extends State<CartPage> {
               },
             ),
           ),
-          ListTile(
-            title:
-                Text('Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}'),
-          ),
-          ListTile(
-            title: Text('Frete: R\$ ${shippingCost.toStringAsFixed(2)}'),
-          ),
-          ListTile(
-            title:
-                Text('Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}'),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.blue[600],
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(
+                    'Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Frete: R\$ ${shippingCost.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           ElevatedButton(
             onPressed: () {
-              // Lógica para finalizar a compra
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Compra Finalizada'),
-                    content: const Text('Obrigado por sua compra!'),
-                    actions: [
-                      TextButton(
-                        child: const Text('Fechar'),
-                        onPressed: () {
-                          //navegar para a página inicial
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()),
-                            (route) => false,
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+              _startAnimation();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: isProcessing ? null : Colors.deepPurple,
               foregroundColor: Colors.white,
               elevation: 3,
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -152,9 +243,20 @@ class _CartPageState extends State<CartPage> {
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
-            child: const Text(
-              'Finalizar Compra',
-              style: TextStyle(fontSize: 18),
+            child: AnimatedBuilder(
+              animation: _buttonColorAnimation,
+              builder: (context, child) {
+                return isProcessing
+                    ? const SpinKitCircle(
+                        color: Colors.white,
+                        size: 24,
+                      )
+                    : child!;
+              },
+              child: Text(
+                isAnimationCompleted ? 'Finalizado' : 'Finalizar Compra',
+                style: const TextStyle(fontSize: 16),
+              ),
             ),
           ),
         ],
@@ -169,6 +271,22 @@ class _CartPageState extends State<CartPage> {
   double calculateGrandTotal() {
     return calculateTotal() + shippingCost;
   }
+
+  void _startAnimation() {
+    setState(() {
+      isProcessing = true;
+    });
+
+    _animationController.forward();
+
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+        (route) => false,
+      );
+    });
+  }
 }
 
 class CartItem {
@@ -177,9 +295,10 @@ class CartItem {
   double price;
   String imagePath;
 
-  CartItem(
-      {required this.name,
-      required this.quantity,
-      required this.price,
-      required this.imagePath});
+  CartItem({
+    required this.name,
+    required this.quantity,
+    required this.price,
+    required this.imagePath,
+  });
 }
