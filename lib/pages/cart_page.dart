@@ -260,9 +260,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
               foregroundColor: Colors.white,
               elevation: 3,
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.circular(10),
+              // ),
             ),
             child: AnimatedBuilder(
               animation: _buttonColorAnimation,
