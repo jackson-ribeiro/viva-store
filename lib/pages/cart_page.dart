@@ -66,15 +66,20 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 224, 224, 224),
       appBar: AppBar(
-        title:
-            const Text('Meu Carrinho', style: TextStyle(color: Colors.black)),
+        title: const Text(
+          'Viva Store',
+          style: TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const CircleAvatar(
-            child: Icon(Icons.arrow_back),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            child: Icon(Icons.arrow_back_ios_new),
             // backgroundColor: Colors.blue,
           ),
           onPressed: () {
@@ -127,8 +132,14 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Preço: R\$${item.price.toStringAsFixed(2)}'),
-                      Text('Total: R\$${itemTotal.toStringAsFixed(2)}'),
+                      Text(
+                        'Preço: R\$${item.price.toStringAsFixed(2)}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Total: R\$${itemTotal.toStringAsFixed(2)}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                   trailing: Row(
@@ -147,7 +158,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         child: Container(
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.deepPurple,
+                            color: Color.fromARGB(255, 198, 40, 40),
                           ),
                           padding: const EdgeInsets.all(8),
                           child: const Icon(
@@ -177,7 +188,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         child: Container(
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.deepPurple,
+                            color: Color.fromARGB(255, 48, 191, 62),
                           ),
                           padding: const EdgeInsets.all(8),
                           child: const Icon(
@@ -200,12 +211,21 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             ),
             child: Column(
               children: [
+                const ListTile(
+                  title: Text(
+                    'Checkout',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 ListTile(
                   title: Text(
                     'Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}',
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -213,8 +233,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   title: Text(
                     'Frete: R\$ ${shippingCost.toStringAsFixed(2)}',
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -222,8 +242,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   title: Text(
                     'Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}',
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -235,7 +255,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
               _startAnimation();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: isProcessing ? null : Colors.deepPurple,
+              backgroundColor:
+                  isProcessing ? null : const Color.fromARGB(255, 48, 191, 62),
               foregroundColor: Colors.white,
               elevation: 3,
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
