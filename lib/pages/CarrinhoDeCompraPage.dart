@@ -21,8 +21,8 @@ class CarrinhoDeCompraPage extends StatelessWidget {
           return ListTile(
             leading: CachedNetworkImage(
               imageUrl: produto.imageUrl,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               height: 50,
               width: 50,
             ),
