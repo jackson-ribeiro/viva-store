@@ -14,13 +14,13 @@ void main() async {
   // Adicionar no Cloud Firestore
   // FirebaseFirestore.instance.collection("produto").doc().set({
   //   "id_produto": const Uuid().v4(),
-  //   "nome_prod": "Tênis 2",
-  //   "desc_prod": "Tênis 2",
-  //   "categoria_prod": "beleza",
+  //   "nome_prod": "Tenis-New-Balance-WRL24TI",
+  //   "desc_prod": "Tenis-New-Balance-NOVO",
+  //   "categoria_prod": "vestuário",
   //   "imagem_prod":
   //       "https://centralsurf.vteximg.com.br/arquivos/ids/223465-1000-1000/Tenis-New-Balance-WRL24TI.jpg?v=636717579174930000",
-  //   "estoque": "400",
-  //   "valor": "3"
+  //   "estoque": "20",
+  //   "valor": "450.50"
   // });
 
   runApp(const MyApp());
