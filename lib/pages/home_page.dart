@@ -202,12 +202,14 @@ class _HomePageState extends State<HomePage> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 4.0),
-                              // Text(
-                              //   produto.desc_prod,
-                              //   style: TextStyle(color: Colors.grey[600]),
-                              //   maxLines: 2,
-                              //   overflow: TextOverflow.ellipsis,
-                              // ),
+                              Text(
+                                produto.categoria,
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              Text(
+                                'R\$ ${produto.valor}',
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
                             ],
                           ),
                         ),
