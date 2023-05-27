@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
@@ -10,7 +8,7 @@ class CartPage extends StatefulWidget {
   State<CartPage> createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
+class _CartPageState extends State<CartPage> {
   List<CartItem> cartItems = [
     CartItem(
       name: 'Item 1',
@@ -34,35 +32,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
   double shippingCost = 5.0;
 
-  bool isProcessing = false;
-  bool isAnimationCompleted = false;
-
-  late AnimationController _animationController;
-  late Animation<Color?> _buttonColorAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
-
-    _buttonColorAnimation = _animationController.drive(
-      ColorTween(
-        begin: Colors.blue,
-        end: Colors.green,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +49,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
             child: Icon(Icons.arrow_back_ios_new),
-            // backgroundColor: Colors.blue,
           ),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
@@ -90,31 +58,22 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             );
           },
         ),
-        actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.delete),
-          //   onPressed: () {
-          //     // Lógica para esvaziar o carrinho
-          //     setState(() {
-          //       cartItems.clear();
-          //     });
-          //   },
-          // ),
-          // IconButton(
-          //   icon: const Icon(Icons.home),
-          //   onPressed: () {
-          //     // Navegar para a página inicial
-          //     Navigator.pushAndRemoveUntil(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const HomePage()),
-          //       (route) => false,
-          //     );
-          //   },
-          // ),
-        ],
       ),
       body: Column(
         children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: const Text(
+                'Meu Carrinho',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: cartItems.length,
@@ -122,100 +81,109 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                 final item = cartItems[index];
                 final itemTotal = item.price * item.quantity;
 
-                return ListTile(
-                  leading: Image.asset(
-                    item.imagePath,
-                    width: 50,
-                    height: 50,
-                  ),
-                  title: Text(item.name),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Preço: R\$${item.price.toStringAsFixed(2)}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Total: R\$${itemTotal.toStringAsFixed(2)}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (item.quantity > 1) {
-                              item.quantity--;
-                            } else {
-                              cartItems.removeAt(index);
-                            }
-                          });
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromARGB(255, 198, 40, 40),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.remove,
-                            color: Colors.white,
+                return Container(
+                  color: Colors.white, // Cor de fundo branca
+                  padding: const EdgeInsets.all(16),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ListTile(
+                    leading: Image.asset(
+                      item.imagePath,
+                      width: 50,
+                      height: 50,
+                    ),
+                    title: Text(item.name),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Preço: R\$${item.price.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Total: R\$${itemTotal.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (item.quantity > 1) {
+                                item.quantity--;
+                              } else {
+                                cartItems.removeAt(index);
+                              }
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color.fromARGB(255, 255, 40, 40),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(
+                              Icons.remove,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        item.quantity.toString(),
-                        style: const TextStyle(
-                          fontSize: 16,
+                        const SizedBox(
+                          width: 16,
                         ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            item.quantity++;
-                          });
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromARGB(255, 48, 191, 62),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
+                        Text(
+                          item.quantity.toString(),
+                          style: const TextStyle(
+                            fontSize: 16,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              item.quantity++;
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color.fromARGB(255, 48, 191, 62),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
             ),
           ),
+          const Divider(
+            color: Colors.grey,
+            height: 1,
+            thickness: 1,
+            indent: 16,
+            endIndent: 16,
+          ),
           Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.blue[600],
-              borderRadius: BorderRadius.circular(40),
-            ),
+            // color: Colors.white, // Cor de fundo branca
             child: Column(
               children: [
                 const ListTile(
                   title: Text(
                     'Checkout',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -225,7 +193,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                     'Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}',
                     style: const TextStyle(
                       color: Colors.black,
-                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -234,7 +201,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                     'Frete: R\$ ${shippingCost.toStringAsFixed(2)}',
                     style: const TextStyle(
                       color: Colors.black,
-                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -243,7 +209,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                     'Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}',
                     style: const TextStyle(
                       color: Colors.black,
-                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -252,32 +217,21 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
           ),
           ElevatedButton(
             onPressed: () {
-              _startAnimation();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+                (route) => false,
+              );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  isProcessing ? null : const Color.fromARGB(255, 48, 191, 62),
+              backgroundColor: const Color.fromARGB(255, 48, 191, 62),
               foregroundColor: Colors.white,
               elevation: 3,
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
             ),
-            child: AnimatedBuilder(
-              animation: _buttonColorAnimation,
-              builder: (context, child) {
-                return isProcessing
-                    ? const SpinKitCircle(
-                        color: Colors.white,
-                        size: 24,
-                      )
-                    : child!;
-              },
-              child: Text(
-                isAnimationCompleted ? 'Finalizado' : 'Finalizar Compra',
-                style: const TextStyle(fontSize: 16),
-              ),
+            child: const Text(
+              'Finalizar Compra',
+              style: TextStyle(fontSize: 16),
             ),
           ),
         ],
@@ -291,22 +245,6 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
   double calculateGrandTotal() {
     return calculateTotal() + shippingCost;
-  }
-
-  void _startAnimation() {
-    setState(() {
-      isProcessing = true;
-    });
-
-    _animationController.forward();
-
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-        (route) => false,
-      );
-    });
   }
 }
 
