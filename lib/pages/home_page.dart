@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 produto.nome_prod,
@@ -204,11 +204,15 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 4.0),
                               Text(
                                 produto.categoria,
-                                style: TextStyle(color: Colors.grey[600]),
+                                style: TextStyle(color: Color.fromARGB(255, 104, 104, 104)),
                               ),
+                              const SizedBox(height: 4.0),
                               Text(
-                                'R\$ ${produto.valor}',
-                                style: TextStyle(color: Colors.grey[600]),
+                                'R\$ ${produto.valor.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 45, 111, 79),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
