@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
-
 import '../Class/Produto.dart';
 import 'home_page.dart';
 
@@ -32,7 +30,7 @@ class _CartPageState extends State<CartPage> {
       backgroundColor: const Color.fromARGB(255, 224, 224, 224),
       appBar: AppBar(
         title: const Text(
-          'Viva Store',
+          'Viva Store - Meu Carrinho',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -42,7 +40,7 @@ class _CartPageState extends State<CartPage> {
           icon: const CircleAvatar(
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
-            child: Icon(Icons.arrow_back_ios_new),
+            child: Icon(Icons.arrow_back),
           ),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
@@ -55,19 +53,6 @@ class _CartPageState extends State<CartPage> {
       ),
       body: Column(
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              child: const Text(
-                'Meu Carrinho',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: widget.carrinho.length,
@@ -180,13 +165,7 @@ class _CartPageState extends State<CartPage> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                      (route) => false,
-                    );
-                  },
+                  onPressed: _showConfirmationDialog,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 48, 191, 62),
                     foregroundColor: Colors.white,
@@ -243,6 +222,7 @@ class _CartPageState extends State<CartPage> {
         this.shippingCost = double.parse(json[0]['price']);
       });
     } else {
+      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) {
@@ -262,5 +242,92 @@ class _CartPageState extends State<CartPage> {
         },
       );
     }
+  }
+
+  void _showConfirmationDialog() {
+    String cep = cepController.text.trim();
+
+    if (cep.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Atenção'),
+            content:
+                const Text('Digite um CEP válido para finalizar a compra.'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return; // Retorna para impedir a exibição do diálogo de confirmação
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmação'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CachedNetworkImage(
+                imageUrl:
+                    'https://static-00.iconduck.com/assets.00/successful-purchase-illustration-512x352-ok8qwrme.png',
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+              const SizedBox(height: 8),
+              const Text('Deseja finalizar a compra?'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Aqui você pode adicionar a lógica para finalizar a compra
+                // por exemplo, limpar o carrinho, salvar os dados no banco de dados, etc.
+                // Depois de finalizar, você pode navegar para a página inicial
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  (route) => false,
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                ),
+              ),
+              child: const Text('Sim'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                ),
+              ),
+              child: const Text('Não'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
