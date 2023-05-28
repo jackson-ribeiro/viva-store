@@ -82,10 +82,12 @@ class _CartPageState extends State<CartPage> {
                 final itemTotal = item.price * item.quantity;
 
                 return Container(
-                  color: Colors.white, // Cor de fundo branca
-                  padding: const EdgeInsets.all(16),
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  margin: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(14),
                   child: ListTile(
                     leading: Image.asset(
                       item.imagePath,
@@ -122,7 +124,7 @@ class _CartPageState extends State<CartPage> {
                           child: Container(
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Color.fromARGB(255, 255, 40, 40),
+                              color: Color.fromARGB(255, 198, 40, 40),
                             ),
                             padding: const EdgeInsets.all(8),
                             child: const Icon(
@@ -168,70 +170,60 @@ class _CartPageState extends State<CartPage> {
               },
             ),
           ),
-          const Divider(
-            color: Colors.grey,
-            height: 1,
-            thickness: 1,
-            indent: 16,
-            endIndent: 16,
-          ),
           Container(
-            // color: Colors.white, // Cor de fundo branca
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const ListTile(
-                  title: Text(
-                    'Checkout',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                const Text(
+                  'Checkout',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                 ),
-                ListTile(
-                  title: Text(
-                    'Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Colors.black,
+                const SizedBox(height: 8),
+                Text(
+                  'Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}',
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Frete: R\$ ${shippingCost.toStringAsFixed(2)}',
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      (route) => false,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 48, 191, 62),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Frete: R\$ ${shippingCost.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Total: R\$ ${calculateGrandTotal().toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
+                  child: const Text(
+                    'Finalizar Compra',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-                (route) => false,
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 48, 191, 62),
-              foregroundColor: Colors.white,
-              elevation: 3,
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-            ),
-            child: const Text(
-              'Finalizar Compra',
-              style: TextStyle(fontSize: 16),
             ),
           ),
         ],
