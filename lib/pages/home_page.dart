@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:viva_store/ProdutosFire.dart';
 import 'package:viva_store/Class/Produto.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:viva_store/pages/cart.dart';
 import 'package:viva_store/pages/product_detail_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -205,7 +206,8 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 4.0),
                               Text(
                                 produto.categoria,
-                                style: const TextStyle(color: Color.fromARGB(255, 104, 104, 104)),
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 104, 104, 104)),
                               ),
                               const SizedBox(height: 4.0),
                               Text(
@@ -246,39 +248,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CarrinhoPage(carrinho: carrinho),
-      ),
-    );
-  }
-}
-
-class CarrinhoPage extends StatelessWidget {
-  final List<Produto> carrinho;
-
-  const CarrinhoPage({Key? key, required this.carrinho}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Carrinho'),
-      ),
-      body: ListView.builder(
-        itemCount: carrinho.length,
-        itemBuilder: (context, index) {
-          final produto = carrinho[index];
-          return ListTile(
-            leading: CachedNetworkImage(
-              imageUrl: produto.imageUrl,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              height: 50,
-              width: 50,
-            ),
-            title: Text(produto.nome_prod),
-            subtitle: Text(produto.desc_prod),
-          );
-        },
+        builder: (context) => CartPage(carrinho: carrinho),
       ),
     );
   }
