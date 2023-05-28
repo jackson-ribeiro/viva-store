@@ -8,6 +8,7 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.shopping_cart, color: Colors.black),
             onPressed: () {
-              _openCarrinho(); // Chama o método para exibir o carrinho
+              _openCarrinho();
             },
           ),
         ],
@@ -204,12 +205,12 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 4.0),
                               Text(
                                 produto.categoria,
-                                style: TextStyle(color: Color.fromARGB(255, 104, 104, 104)),
+                                style: const TextStyle(color: Color.fromARGB(255, 104, 104, 104)),
                               ),
                               const SizedBox(height: 4.0),
                               Text(
                                 'R\$ ${produto.valor.toStringAsFixed(2)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Color.fromARGB(255, 45, 111, 79),
                                   fontWeight: FontWeight.bold,
                                 ),
