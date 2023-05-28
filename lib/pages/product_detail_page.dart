@@ -153,7 +153,14 @@ class _ProductPageState extends State<ProductPage> {
 
   void _adicionarAoCarrinho() {
     setState(() {
-      widget.carrinho.add(widget.produto);
+      var produto = Produto(
+          nome_prod: widget.produto.nome_prod,
+          valor: widget.produto.valor,
+          estoque: 1,
+          imageUrl: widget.produto.imageUrl,
+          desc_prod: widget.produto.desc_prod,
+          categoria: widget.produto.categoria);
+      widget.carrinho.add(produto);
     });
 
     showDialog(
