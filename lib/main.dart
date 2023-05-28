@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-import 'package:viva_store/firebase_options.dart';
 import 'pages/intro_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:viva_store/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
