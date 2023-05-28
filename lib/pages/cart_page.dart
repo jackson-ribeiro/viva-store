@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
@@ -31,6 +34,7 @@ class _CartPageState extends State<CartPage> {
   ];
 
   double shippingCost = 5.0;
+  String cep = '';
 
   @override
   Widget build(BuildContext context) {
@@ -99,69 +103,12 @@ class _CartPageState extends State<CartPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Preço: R\$${item.price.toStringAsFixed(2)}',
+                          'Preço: R\$ ${item.price.toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'Total: R\$${itemTotal.toStringAsFixed(2)}',
+                          'Total: R\$ ${itemTotal.toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (item.quantity > 1) {
-                                item.quantity--;
-                              } else {
-                                cartItems.removeAt(index);
-                              }
-                            });
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color.fromARGB(255, 198, 40, 40),
-                            ),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(
-                              Icons.remove,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          item.quantity.toString(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              item.quantity++;
-                            });
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color.fromARGB(255, 48, 191, 62),
-                            ),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -181,12 +128,43 @@ class _CartPageState extends State<CartPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Checkout',
+                  'Digite o CEP',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),
                 ),
+                const SizedBox(height: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.search,
+                        color: Color.fromARGB(255, 48, 191, 62),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              cep = value;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'CEP',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
                 const SizedBox(height: 8),
                 Text(
                   'Sub-Total: R\$ ${calculateTotal().toStringAsFixed(2)}',
