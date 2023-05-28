@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 import 'home_page.dart';
 
@@ -35,6 +35,44 @@ class _CartPageState extends State<CartPage> {
 
   double shippingCost = 5.0;
   String cep = '';
+
+  void _showPurchaseConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Compra Finalizada'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Image(
+                image: AssetImage('lib/images/success.png'),
+                width: 200,
+                height: 200,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Compra finalizada com sucesso!',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  (route) => false,
+                );
+              },
+              child: const Text('Fechar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,11 +220,7 @@ class _CartPageState extends State<CartPage> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                      (route) => false,
-                    );
+                    _showPurchaseConfirmationDialog();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 48, 191, 62),
