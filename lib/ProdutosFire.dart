@@ -1,6 +1,5 @@
-// ignore_for_file: file_names
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:viva_store/Class/Produto.dart';
 
 class ProdutoFire {
@@ -43,9 +42,9 @@ class ProdutoFire {
 
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('produto') // Corrigido para 'produto'
+          .collection('produto')
           .where('categoria_prod',
-              isEqualTo: category) // Ajustado para 'categoria_prod'
+              isEqualTo: category)
           .get();
 
       querySnapshot.docs.forEach((doc) {
@@ -53,15 +52,17 @@ class ProdutoFire {
           nome_prod: doc['nome_prod'],
           desc_prod: doc['desc_prod'],
           valor:
-              double.parse(doc['valor'].toString()), // Convertido para double
+              double.parse(doc['valor'].toString()),
           imageUrl: doc['imagem_prod'],
           categoria: doc['categoria_prod'],
-          estoque: int.parse(doc['estoque'].toString()), // Convertido para int
+          estoque: int.parse(doc['estoque'].toString()),
         );
         produtos.add(produto);
       });
     } catch (e) {
-      print('Erro ao buscar produtos por categoria: $e');
+      if (kDebugMode) {
+        print('Erro ao buscar produtos por categoria: $e');
+      }
     }
 
     return produtos;
@@ -91,7 +92,9 @@ class ProdutoFire {
           }
         });
       } catch (e) {
-        print('Erro ao buscar produtos: $e');
+        if (kDebugMode) {
+          print('Erro ao buscar produtos: $e');
+        }
       }
     } else {
       produtos = await getProducts(); // Obter todos os produtos
